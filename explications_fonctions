@@ -1,0 +1,26 @@
+Ces fonctions sont définies dans la classe. 
+
+function __construct : 
+Cette fonction est définie dans la classe.
+
+La méthode __construct permet la création d'un objet lors de l'instanciation. 
+on défini les paramètres qui correspondront aux paramètres donnés lors de la création de l'objet. 
+
+function combat($adversaire) :
+Cette fonction permet de determiner qui des 2 pokemons frappe le premier, selon leur initiative. 
+On appelle dans cette fonction la fonction attaque. 
+On determine si le pokemon qui a subit la première attaque a suffisament de points de vie pour répliquer.
+
+function attaque($cible) :
+
+Cette fonction permet de lancer une attaque.
+
+On vérifie si le coup porté par le premier à attaquer touche bien sa cible, grâce à une comparaison entre un chiffre au hasard et la precision de celui qui attaque. 
+
+Si le coup a bien été porté, on calcule les dégats, en déterminant la force de l'attaque, d'abord par rapport à la force de l'attaquant, puis par rapport à l'affinité en fonction du type de la cible. Une fois l'efficacité de l'attaque determinée, on fait appelle à la fonction défense.
+
+function defense($degats) :
+
+Cette fonction permet de calculer les points de vie perdus, en fonction de la défense. 
+On soustrait les points perdus au pv. 
+Si les points de vie sont négatifs ont les rétablis à 0, le pokemon est KO. 

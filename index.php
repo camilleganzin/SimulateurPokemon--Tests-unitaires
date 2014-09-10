@@ -38,7 +38,7 @@ $ponita = new Pokemon('Ponita', //nom
 					 '110', //initiative
 					 '100'); //precision
 
-$pokemons = array($pika, $cara, $rondoudou, $ponita);
+/*$pokemons = array($pika, $cara, $rondoudou, $ponita);*/
 
 foreach(range(1, 10) as $i) {
     $combat = $pika->combat($cara);
