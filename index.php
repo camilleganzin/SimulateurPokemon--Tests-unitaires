@@ -1,113 +1,71 @@
 <?php
-
+require_once('class.php');
 require_once('header.php');
 
-class Pokemon {
-	
-	public $nom;
 
-	public $type;
 
-	public $pv;
-
-	public $pvmax;
-
-	public $defense;
-
-	public $force;
-
-	public $initiative;
-
-	public $precision;
-
-	public function __construct($nom, $type, $pv, $defense, $force, $initiative, $precision) {
-		$this->nom = $nom;
-		$this->type = $type;
-		$this->pv = $this->pvmax = $pv;
-		$this->defense = $defense;
-		$this->force = $force;
-		$this->initiative = $initiative;
-		$this->precision = $precision;
-	}
-
-	public function attaque($cible) {
-			//this veut attaquer cible. On determine qui touche en premier grace à l'initative. 
-		if($cible->pv > 0 && $this->pv > 0) {
-			if ($this->initiative > $cible->initiative) {
-				$cible->pv = $cible->pv-$this->force;
-				$this->force = $this->force+1;
-
-				if($cible->pv > 0){
-					$this->pv = $this->pv-$cible->force;
-					$this->initiative = $this->initiative-1;
-				} else {
-					echo '<p>Fin de l\'attaque, '.$cible->nom.' est mort</p>';
-				}
-
-			} else {
-				$this->pv = $this->pv-$cible->force;
-				$cible->force = $cible->force+1;
-
-				if($this->pv > 0){
-					$cible->pv = $cible->pv-$this->force;
-					$cible->initiative = $cible->initiative-1;
-				} else {
-					echo '<p>Fin de l\'attaque, '.$this->nom.' est mort</p>';
-				}
-			}
-
-			echo '<h1>Tour de combat</h1><p>'.$this->nom.' attaque '.$cible->nom.'<br>'.$cible->nom.' se defend contre '.$this->nom.' avec '.$cible->defense.'</p><br>'.$this->nom.' a maintenant '.$this->pv.'/'.$this->pvmax.' points de vie et '.$cible->nom.' a maintenant '.$cible->pv.'/'.$cible->pvmax.' points de vie';
-
-		} echo '<p>Fin de l\'attaque</p>';
-	}
-}
 
 //Pour créer un objet, on instancie et on donne les paramètres 
 $pika = new Pokemon('Pika', //nom
-					'Pokemon', //type
+					'electrik', //type
 					'100', //pv
-					'100', //pv max
-					'une attaque éclair', //defense
+					'60', //defense
 					'2', //force
 					'80', //initiative
 					'100'); //precision
 
 $cara = new Pokemon('Cara', //nom
-					'Pokemon', //type
+					'eau', //type
 					'100', //pv
-					'100', //pv max
-					'des Paillettes', //defense
+					'45', //defense
 					'3', //force
 					'70', //initiative
 					'90'); //precision
 
 $rondoudou = new Pokemon('Rondoudou', //nom
-						 'Pokemon', //type
+						 'eau', //type
 						 '100', //pv
-						 '100', //pv max
-						 'Zzzzz', //defense
+						 '30', //defense
 						 '4', //force
 						 '100', //initiative
 						 '80'); //precision
 
 $ponita = new Pokemon('Ponita', //nom
-					 'Pokemon', //type
+					 'feu', //type
 					 '100', //pv
-					 '100', //pv max
-					 'une Licorne', //defense
+					 '50', //defense
 					 '5', //force
 					 '110', //initiative
 					 '100'); //precision
 
 $pokemons = array($pika, $cara, $rondoudou, $ponita);
 
-foreach($pokemons as $att) {
-		echo '<p style="color:red">Attaquant : '.$att->nom.'</p>';
-		foreach($pokemons as $def) {
-				echo '<p style="color:blue">Défenseur : '.$def->nom.' <span style="color:red">(attaquant : '.$att->nom.')</span></p>';
-				if($att != $def) {
-					$att->attaque($def);
-				}
-		}
+foreach(range(1, 10) as $i) {
+    $combat = $pika->combat($cara);
 
+    echo '<h1>Résultats du tour '.$i.' :</h1>'.PHP_EOL;
+    echo '<ul>'.PHP_EOL;
+
+    foreach($combat as $info) {
+        echo '<li>'.$info.'</li>'.PHP_EOL;
+    }
+    echo '</ul>';
+    echo '<p>État des pokémons : <br />';
+    echo $pika->nom.' : '.$pika->pv.'/'.$pika->pvmax.'<br />';
+    echo $cara->nom.' : '.$cara->pv.'/'.$cara->pvmax.'</p>'.PHP_EOL;
+}
+
+foreach(range(1, 10) as $i) {
+    $combat = $ponita->combat($rondoudou);
+
+    echo '<h1>Résultats du tour '.$i.' :</h1>'.PHP_EOL;
+    echo '<ul>'.PHP_EOL;
+
+    foreach($combat as $info) {
+        echo '<li>'.$info.'</li>'.PHP_EOL;
+    }
+    echo '</ul>';
+    echo '<p>État des pokémons : <br />';
+    echo $ponita->nom.' : '.$ponita->pv.'/'.$ponita->pvmax.'<br />';
+    echo $rondoudou->nom.' : '.$rondoudou->pv.'/'.$rondoudou->pvmax.'</p>'.PHP_EOL;
 }
