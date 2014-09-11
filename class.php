@@ -46,22 +46,22 @@ class Pokemon {
         if($this->initiative < $adversaire->initiative) {
             $log = array_merge($log, $adversaire->attaque($this));
             if($this->pv > 0) {
-                $log = array_merge($log, $this->attaque($adversaire));
+                $log = array_merge($log, $this->attaque($adversaire, true));
             }
         } else {
             $log = array_merge($log, $this->attaque($adversaire));
             if($adversaire->pv > 0) {
-                $log = array_merge($log, $adversaire->attaque($this));
+                $log = array_merge($log, $adversaire->attaque($this, true));
             }
         }
         return $log;
     }
 
-	public function attaque($cible) {
+	public function attaque($cible, $contre = false) {
 			$log = array();
         // on vérifie si le coup touche
+        $log[] = $this->nom.' '.($contre ? 'contre-' : '').'attaque '.$cible->nom.'.';
         if(mt_rand(1, 100) <= $this->precision) { // on touche !
-            $log[] = $this->nom.' attaque '.$cible->nom.'.';
             // on calcule les dégâts
             $degats = $this->force;
             // gestion des affinités
@@ -76,7 +76,7 @@ class Pokemon {
                 $log[] = $cible->nom.' est KO !';
             }
         } else { // on a raté
-            $log[] = $this->nom.' attaque '.$cible->nom.'… mais rate son coup !';
+            $log[] = '… mais échoue !';
         }
         return $log;
     }

@@ -91,7 +91,9 @@ class PokemonTest extends PHPUnit_Framework_TestCase {
 
 		$combat = $this->pokemon->combat($pokemon2);
 
-        $this->assertEquals($combat[0], 'Cible attaque Pokemon… mais rate son coup !');
+        $this->assertEquals($combat[0], 'Cible attaque Pokemon.');
+
+        return array($pokemon2, $combat);
 	}
 
 	public function testCombatInitiativesEgales(){
@@ -100,6 +102,22 @@ class PokemonTest extends PHPUnit_Framework_TestCase {
 		$combat = $this->pokemon->combat($pokemon2);
 
         $this->assertEquals($combat[0], 'Pokemon attaque Cible.');
+	}
+
+	/**
+	* @depends testCombatPremierAttaquant
+	*/
+	public function testCombatPrecision($array) {
+		list($cible, $combat) = $array;
+		$this->assertEquals('… mais échoue !', $combat[1]);
+	}
+
+	public function testCombatContreAttaque() {
+		$this->pokemon->defense = 50;
+		$cible = new Pokemon('Cible', 'feu', 100, 2, 2, 1, 100);
+		$combat = $this->pokemon->combat($cible);
+		$this->assertEquals('Cible contre-attaque Pokemon.', $combat[2]);
+		$this->assertEquals($this->pokemon->pvmax - 1, $this->pokemon->pv);
 	}	
 
 }
