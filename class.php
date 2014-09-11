@@ -35,21 +35,23 @@ class Pokemon {
 	}
 
 	public function combat($adversaire) {
+        if(!$adversaire instanceof Pokemon) {
+            throw new InvalidArgumentException('L’adversaire n’est pas un pokémon.');
+        }
         // $this veut attaquer $adversaire. On détermine qui touche en premier
         $log = array();
         if($this->pv <= 0 || $adversaire->pv <= 0) {
-            $log[] = 'Les morts ne se battent pas !';
-        } else {
-            if($this->initiative < $adversaire->initiative) {
-                $log = array_merge($log, $adversaire->attaque($this));
-                if($this->pv > 0) {
-                    $log = array_merge($log, $this->attaque($adversaire));
-                }
-            } else {
+            throw new Exception('Les morts ne se battent pas !');
+        }
+        if($this->initiative < $adversaire->initiative) {
+            $log = array_merge($log, $adversaire->attaque($this));
+            if($this->pv > 0) {
                 $log = array_merge($log, $this->attaque($adversaire));
-                if($adversaire->pv > 0) {
-                    $log = array_merge($log, $adversaire->attaque($this));
-                }
+            }
+        } else {
+            $log = array_merge($log, $this->attaque($adversaire));
+            if($adversaire->pv > 0) {
+                $log = array_merge($log, $adversaire->attaque($this));
             }
         }
         return $log;
@@ -82,7 +84,9 @@ class Pokemon {
     public function defense($degats) {
         $log = array();
         // on applique la défense
-        $pv_perdus = round($degats * ($this->defense / 100));
+        //echo 'on attaque avec '.$degats.' points (def '.($this->defense/100).').'.PHP_EOL;
+        $pv_perdus = round($degats * (1-($this->defense / 100)));
+        //echo 'on subit '.$pv_perdus.' points.'.PHP_EOL;
         $log[] = $this->nom.' subit '.$pv_perdus.' points de dégats.';
         $this->pv -= $pv_perdus;
         if($this->pv < 0) $this->pv = 0;
